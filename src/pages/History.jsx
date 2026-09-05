@@ -1,4 +1,4 @@
-import { HiClockReviewed } from 'react-icons/hi2';
+import { HiOutlineClock } from 'react-icons/hi2';
 import styles from './History.module.css';
 
 export default function History() {
@@ -16,7 +16,7 @@ export default function History() {
         {/* Empty state */}
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon} aria-hidden="true">
-            <HiClockReviewed size={48} />
+            <HiOutlineClock size={48} />
           </div>
           <h2 className={styles.emptyTitle}>No calculations yet</h2>
           <p className={styles.emptyDesc}>

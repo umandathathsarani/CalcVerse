@@ -9,49 +9,49 @@
    ============================================================ */
 :root,
 [data-theme="dark"] {
-  /* Backgrounds */
-  --bg-base:        #0B0F19;
-  --bg-surface:     #111827;
-  --bg-surface-2:   #152032;
-  --bg-hover:       #1C2D45;
-  --bg-card:        #111827;
-  --bg-card-hover:  #152032;
-  --bg-input:       #0D1627;
+  /* Backgrounds - Refined Night Sky & Bronze */
+  --bg-base:        #121311; /* Very dark warm void */
+  --bg-surface:     #1E1F1D; /* Sleeker, darker surface for cards and footer */
+  --bg-surface-2:   #2C2D2B; 
+  --bg-hover:       #2C2D2B; 
+  --bg-card:        #1E1F1D;
+  --bg-card-hover:  #2C2D2B; 
+  --bg-input:       #181917; 
 
   /* Borders */
-  --border:         #1E2D42;
-  --border-focus:   #6366F1;
-  --border-hover:   #334155;
+  --border:         #3A3B39; /* More visible, cleaner border */
+  --border-focus:   #B88947; /* Brighter bronze */
+  --border-hover:   #543c14;
 
-  /* Text */
-  --text-primary:   #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-muted:     #64748B;
-  --text-inverse:   #0B0F19;
+  /* Text - Highly Readable */
+  --text-primary:   #F2F2F2; /* Very crisp off-white */
+  --text-secondary: #C0C0BE; /* Clear secondary text */
+  --text-muted:     #888986; /* Readable muted text */
+  --text-inverse:   #121311;
 
-  /* Accent — Indigo/Purple */
-  --accent:         #6366F1;
-  --accent-hover:   #4F52D3;
-  --accent-light:   rgba(99, 102, 241, 0.12);
-  --accent-light-2: rgba(99, 102, 241, 0.06);
-  --secondary:      #8B5CF6;
-  --secondary-light:rgba(139, 92, 246, 0.12);
+  /* Accent — Glowing Bronze/Gold */
+  --accent:         #B88947; /* Brightened bronze so it actually glows/pops */
+  --accent-hover:   #D6A45A; /* Golden hover */
+  --accent-light:   rgba(184, 137, 71, 0.15);
+  --accent-light-2: rgba(184, 137, 71, 0.08);
+  --secondary:      #888986; 
+  --secondary-light:rgba(136, 137, 134, 0.2);
 
   /* Semantic colors */
   --success:        #10B981;
   --success-light:  rgba(16, 185, 129, 0.12);
   --warning:        #F59E0B;
   --warning-light:  rgba(245, 158, 11, 0.12);
-  --danger:         #EF4444;
-  --danger-light:   rgba(239, 68, 68, 0.12);
+  --danger:         #F43F5E;
+  --danger-light:   rgba(244, 63, 94, 0.12);
 
   /* Shadows */
-  --shadow-sm:   0 1px 3px rgba(0,0,0,0.4);
-  --shadow-md:   0 4px 16px rgba(0,0,0,0.5);
-  --shadow-lg:   0 8px 32px rgba(0,0,0,0.6);
-  --shadow-card: 0 2px 8px rgba(0,0,0,0.35), 0 0 0 1px var(--border);
-  --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.5), 0 0 0 1px var(--border-hover);
-  --shadow-accent: 0 0 0 3px rgba(99,102,241,0.25);
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.5);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.6);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.7);
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.4), 0 0 0 1px var(--border);
+  --shadow-card-hover: 0 8px 24px rgba(184,137,71,0.1), 0 0 0 1px var(--border-hover);
+  --shadow-accent: 0 0 12px rgba(184,137,71,0.3);
 
   /* Misc */
   --radius-sm:    6px;
@@ -61,51 +61,52 @@
   --radius-full:  9999px;
 
   --nav-height:   64px;
-  --transition:   all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition:   all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ============================================================
    2. CSS CUSTOM PROPERTIES — LIGHT THEME
    ============================================================ */
 [data-theme="light"] {
-  --bg-base:        #F3F4F8;
+  /* Night Sky Light */
+  --bg-base:        #F5F5F3; 
   --bg-surface:     #FFFFFF;
-  --bg-surface-2:   #F8F9FC;
-  --bg-hover:       #EFF1F7;
+  --bg-surface-2:   #EBEBE9;
+  --bg-hover:       #EBEBE9;
   --bg-card:        #FFFFFF;
-  --bg-card-hover:  #F5F6FB;
-  --bg-input:       #F8F9FC;
+  --bg-card-hover:  #F5F5F3;
+  --bg-input:       #FFFFFF;
 
-  --border:         #E2E6EF;
-  --border-focus:   #6366F1;
-  --border-hover:   #C7D0E3;
+  --border:         #D6D6D4;
+  --border-focus:   #9C6C2B;
+  --border-hover:   #B88947;
 
-  --text-primary:   #0F172A;
-  --text-secondary: #475569;
-  --text-muted:     #94A3B8;
-  --text-inverse:   #F1F5F9;
+  --text-primary:   #1E1F1D; 
+  --text-secondary: #4A4B49; 
+  --text-muted:     #767775;
+  --text-inverse:   #F5F5F3;
 
-  --accent:         #6366F1;
-  --accent-hover:   #4F52D3;
-  --accent-light:   rgba(99, 102, 241, 0.1);
-  --accent-light-2: rgba(99, 102, 241, 0.05);
-  --secondary:      #8B5CF6;
-  --secondary-light:rgba(139, 92, 246, 0.1);
+  --accent:         #9C6C2B; /* Darker bronze */
+  --accent-hover:   #754F1C; 
+  --accent-light:   rgba(156, 108, 43, 0.12);
+  --accent-light-2: rgba(156, 108, 43, 0.06);
+  --secondary:      #767775; 
+  --secondary-light:rgba(118, 119, 117, 0.15);
 
   --success:        #059669;
   --success-light:  rgba(5, 150, 105, 0.1);
   --warning:        #D97706;
   --warning-light:  rgba(217, 119, 6, 0.1);
-  --danger:         #DC2626;
-  --danger-light:   rgba(220, 38, 38, 0.1);
+  --danger:         #E11D48;
+  --danger-light:   rgba(225, 29, 72, 0.1);
 
-  --shadow-sm:   0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md:   0 4px 16px rgba(0,0,0,0.08);
-  --shadow-lg:   0 8px 32px rgba(0,0,0,0.1);
-  --shadow-card: 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
-  --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.1), 0 0 0 1px var(--border-hover);
-  --shadow-accent: 0 0 0 3px rgba(99,102,241,0.2);
+  --shadow-sm:   0 1px 3px rgba(30,31,29,0.06);
+  --shadow-md:   0 4px 16px rgba(30,31,29,0.08);
+  --shadow-lg:   0 8px 32px rgba(30,31,29,0.1);
+  --shadow-card: 0 2px 8px rgba(30,31,29,0.04), 0 0 0 1px var(--border);
+  --shadow-card-hover: 0 8px 24px rgba(156,108,43,0.1), 0 0 0 1px var(--border-hover);
+  --shadow-accent: 0 0 0 3px rgba(156,108,43,0.2);
 }
 
 /* ============================================================

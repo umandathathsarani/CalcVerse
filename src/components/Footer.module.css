@@ -142,11 +142,17 @@
 
 .techBadge {
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-full);
-  background: var(--accent-light);
-  color: var(--accent);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  opacity: 0.3;
   letter-spacing: 0.03em;
+  transition: var(--transition);
+}
+
+.techBadge:hover {
+  opacity: 0.8;
 }

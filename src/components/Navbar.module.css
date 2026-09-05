@@ -1,0 +1,206 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--nav-height);
+  background: transparent;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.scrolled {
+  background: var(--bg-base);
+  border-bottom-color: var(--border);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="light"] .scrolled {
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.08);
+}
+
+.nav {
+  height: 100%;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-height);
+  gap: 2rem;
+}
+
+/* ── Logo ── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--accent);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.logoText {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.logoAccent {
+  color: var(--accent);
+}
+
+/* ── Desktop Links ── */
+.desktopLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  flex: 1;
+  justify-content: center;
+}
+
+.navLink {
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+  letter-spacing: -0.01em;
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.navLinkActive {
+  color: var(--accent) !important;
+  background: var(--accent-light) !important;
+}
+
+/* ── Right Actions ── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ── Hamburger Button ── */
+.menuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.menuButton:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: var(--bg-hover);
+}
+
+/* ── Mobile Menu ── */
+.mobileMenu {
+  position: fixed;
+  top: var(--nav-height);
+  left: 0;
+  right: 0;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 99;
+}
+
+.mobileMenuOpen {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobileLinks {
+  list-style: none;
+  padding: 0.75rem 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobileLink {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.mobileLink:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.mobileLinkActive {
+  color: var(--accent) !important;
+  background: var(--accent-light) !important;
+}
+
+/* ── Overlay ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  top: var(--nav-height);
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 98;
+  backdrop-filter: blur(2px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .desktopLinks {
+    display: none;
+  }
+
+  .menuButton {
+    display: flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobileMenu {
+    display: none;
+  }
+}

@@ -69,30 +69,30 @@
    2. CSS CUSTOM PROPERTIES — LIGHT THEME
    ============================================================ */
 [data-theme="light"] {
-  /* Night Sky Light */
-  --bg-base:        #F5F5F3; 
-  --bg-surface:     #FFFFFF;
-  --bg-surface-2:   #EBEBE9;
-  --bg-hover:       #EBEBE9;
+  /* Ash Gray & Bronze */
+  --bg-base:        #F3F4F6; /* Light ash background */
+  --bg-surface:     #FFFFFF; /* Pure white cards */
+  --bg-surface-2:   #E5E7EB; /* Ash gray buttons */
+  --bg-hover:       #D1D5DB; /* Darker ash hover */
   --bg-card:        #FFFFFF;
-  --bg-card-hover:  #F5F5F3;
-  --bg-input:       #FFFFFF;
+  --bg-card-hover:  #F9FAFB;
+  --bg-input:       #F9FAFB; /* Off-white display */
 
-  --border:         #D6D6D4;
+  --border:         #D1D5DB; /* Ash border */
   --border-focus:   #9C6C2B;
-  --border-hover:   #B88947;
+  --border-hover:   #9CA3AF; /* Dark ash hover */
 
-  --text-primary:   #1E1F1D; 
-  --text-secondary: #4A4B49; 
-  --text-muted:     #767775;
-  --text-inverse:   #F5F5F3;
+  --text-primary:   #111827; /* Near black */
+  --text-secondary: #4B5563; /* Dark ash text */
+  --text-muted:     #6B7280;
+  --text-inverse:   #FFFFFF;
 
-  --accent:         #9C6C2B; /* Darker bronze */
-  --accent-hover:   #754F1C; 
-  --accent-light:   rgba(156, 108, 43, 0.12);
-  --accent-light-2: rgba(156, 108, 43, 0.06);
-  --secondary:      #767775; 
-  --secondary-light:rgba(118, 119, 117, 0.15);
+  --accent:         #9C6C2B; /* Bronze */
+  --accent-hover:   #7A521F; 
+  --accent-light:   rgba(156, 108, 43, 0.15); 
+  --accent-light-2: rgba(156, 108, 43, 0.08);
+  --secondary:      #6B7280; 
+  --secondary-light:rgba(107, 114, 128, 0.15);
 
   --success:        #059669;
   --success-light:  rgba(5, 150, 105, 0.1);
@@ -101,11 +101,11 @@
   --danger:         #E11D48;
   --danger-light:   rgba(225, 29, 72, 0.1);
 
-  --shadow-sm:   0 1px 3px rgba(30,31,29,0.06);
-  --shadow-md:   0 4px 16px rgba(30,31,29,0.08);
-  --shadow-lg:   0 8px 32px rgba(30,31,29,0.1);
-  --shadow-card: 0 2px 8px rgba(30,31,29,0.04), 0 0 0 1px var(--border);
-  --shadow-card-hover: 0 8px 24px rgba(156,108,43,0.1), 0 0 0 1px var(--border-hover);
+  --shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:   0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg:   0 10px 15px -3px rgba(0,0,0,0.1);
+  --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.05), 0 0 0 1px var(--border);
+  --shadow-card-hover: 0 10px 15px -3px rgba(156,108,43,0.1), 0 0 0 1px var(--border-hover);
   --shadow-accent: 0 0 0 3px rgba(156,108,43,0.2);
 }
 

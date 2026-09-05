@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
+import { HistoryProvider } from './context/HistoryContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -31,30 +32,32 @@ function LoadingFallback() {
 export default function App() {
   return (
     <ThemeProvider>
-      <Navbar />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes>
-            {/* Main pages */}
-            <Route path="/"            element={<Home />} />
-            <Route path="/calculators" element={<Calculators />} />
-            <Route path="/history"     element={<History />} />
-            <Route path="/about"       element={<About />} />
+      <HistoryProvider>
+        <Navbar />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingTop: 'var(--nav-height)' }}>
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              {/* Main pages */}
+              <Route path="/"            element={<Home />} />
+              <Route path="/calculators" element={<Calculators />} />
+              <Route path="/history"     element={<History />} />
+              <Route path="/about"       element={<About />} />
 
-            {/* Calculator routes */}
-            <Route path="/calculators/basic"         element={<BasicCalculator />} />
-            <Route path="/calculators/scientific"    element={<ScientificCalculator />} />
-            <Route path="/calculators/graphing"      element={<GraphingCalculator />} />
-            <Route path="/calculators/financial"     element={<FinancialCalculator />} />
-            <Route path="/calculators/programmer"    element={<ProgrammerCalculator />} />
-            <Route path="/calculators/unit-converter"element={<UnitConverter />} />
+              {/* Calculator routes */}
+              <Route path="/calculators/basic"         element={<BasicCalculator />} />
+              <Route path="/calculators/scientific"    element={<ScientificCalculator />} />
+              <Route path="/calculators/graphing"      element={<GraphingCalculator />} />
+              <Route path="/calculators/financial"     element={<FinancialCalculator />} />
+              <Route path="/calculators/programmer"    element={<ProgrammerCalculator />} />
+              <Route path="/calculators/unit-converter"element={<UnitConverter />} />
 
-            {/* 404 fallback */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </div>
-      <Footer />
+              {/* 404 fallback */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </div>
+        <Footer />
+      </HistoryProvider>
     </ThemeProvider>
   );
 }

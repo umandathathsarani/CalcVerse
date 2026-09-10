@@ -88,23 +88,26 @@ Convert across 10 different categories (Length, Weight, Temp, Area, Volume, Spee
 
 ## 📦 Installation & Setup
 
-1. Clone the repository:
+**Prerequisites:** You will need [Node.js](https://nodejs.org/) installed on your machine.
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/umandathathsarani/CalcVerse.git
    cd CalcVerse
    ```
 
-2. Install dependencies:
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-3. Start the development server:
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
+   *This will start a local server, usually at `http://localhost:5173`. Open this URL in your browser to view the app.*
 
-4. Build for production:
+4. **Build for production:**
    ```bash
    npm run build
    ```

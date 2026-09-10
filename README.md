@@ -1,165 +1,89 @@
 # CalcVerse
 
-> **One place for every calculation.**
+**CalcVerse** is a modern, unified calculator platform designed as a developer portfolio project. Rather than a single tool, it bundles six specialized calculators into one sleek, unified interface.
 
-A modern, multi-purpose calculator platform featuring six specialized calculators — built as a developer portfolio project with React and Vite.
+Built with React 18 and Vite, it focuses on providing a premium user experience through beautiful design, fluid interactions, and deep functionality.
 
-![CalcVerse](https://img.shields.io/badge/CalcVerse-v0.1.0-6366F1?style=for-the-badge)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
-![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![CalcVerse Preview](./src/assets/preview-placeholder.png) *(You can replace this with a real screenshot)*
 
----
+## 🚀 Features
 
-## Features
+### 1. Basic Calculator
+A clean, everyday calculator with standard arithmetic operations and a dedicated memory row (`MC`, `MR`, `M+`, `M-`). It tracks your running calculations in a visual history ribbon above the current input.
 
-- 🌙 **Dark-first design** with full light mode support
-- 💾 **Theme persistence** via localStorage
-- 📱 **Fully responsive** — desktop, tablet, mobile
-- ⌨️ **Keyboard support** on applicable calculators
-- 📜 **Calculation history** stored locally
-- ♿ **Accessible** — semantic HTML, ARIA labels, focus states
-- ⚡ **Fast** — lazy loading, no unnecessary dependencies
+### 2. Scientific Calculator
+Designed for advanced mathematics, featuring:
+- Trigonometric functions (`sin`, `cos`, `tan`, `arcsin`, etc.) with `DEG` / `RAD` toggles.
+- Advanced functions (`log`, `ln`, `e`, `π`, roots, exponents).
+- An **Unclosed Parentheses Warning** badge to help avoid syntax errors.
 
----
+### 3. Graphing Calculator
+A real-time function plotter powered by `mathjs` and HTML5 Canvas.
+- Plot multiple equations simultaneously with distinct colors.
+- Interactive panning and zooming.
+- **Evaluate Panel**: Instantly find `y` for a given `x`.
+- **Table of Values**: Generate a scrollable data table for a range of `x` values.
+- **Export**: Download your graph canvas as a PNG.
 
-## Calculators
+### 4. Financial Calculator
+A comprehensive suite for personal finance planning:
+- **Loan / EMI**: Calculate monthly payments and generate an Amortization Schedule (exportable as CSV).
+- **Compound Interest**: Predict future value based on varied compounding frequencies.
+- **Discount & Tax**: Quickly find final prices after applying markups/discounts.
+- **Savings Goal**: Calculate required monthly contributions to hit a target amount.
+- **Tip Splitter**: Split bills easily among friends.
+- Support for multiple global currencies.
 
-| Calculator | Description | Status |
-|---|---|---|
-| 🔢 Basic Calculator | Everyday arithmetic with keyboard support | ✅ Phase 3 |
-| 🔬 Scientific Calculator | Trig, log, constants, DEG/RAD modes | ✅ Phase 4 |
-| 📈 Graphing Calculator | Plot equations on an interactive coordinate plane | ✅ Phase 5 |
-| 💰 Financial Calculator | Loans, interest, investments, amortization | ✅ Phase 6 |
-| 💻 Programmer Calculator | BIN/OCT/DEC/HEX conversion and bitwise ops | ✅ Phase 7 |
-| 📏 Unit Converter | 9 categories: length, weight, temperature, and more | ✅ Phase 8 |
+### 5. Programmer Calculator
+A specialized tool for developers handling bitwise logic:
+- **Multi-Base Live Display**: See inputs evaluated simultaneously in HEX, DEC, OCT, and BIN.
+- **Bitwise Operations**: `AND`, `OR`, `XOR`, `NOT`, and bit shifting (`<<`, `>>`).
+- **Dynamic Word Sizing**: Toggle between 8-bit, 16-bit, 32-bit, and 64-bit boundaries.
+- **Bit-Map Visualizer**: A clickable grid of 64 bits to flip individual bits manually.
+- **Two's Complement** representations for signed integers.
 
----
+### 6. Unit Converter
+Convert across 10 different categories (Length, Weight, Temp, Area, Volume, Speed, Time, Data, Energy, and Currency).
+- **Live Currency Rates**: Fetches real-time exchange rates from `open.er-api.com`.
+- **Quick Results Grid**: See conversions for *all* units in a category at once.
+- **Favourites System**: Pin frequently used units for quick access (persisted in LocalStorage).
 
-## Tech Stack
+### Global App Features
+- **Calculation History Page**: A dedicated page storing all your calculations. You can search, filter by calculator type, copy results, and clear history.
+- **Universal Keyboard Shortcuts**: A quick-access modal (`?` key) lists shortcuts for navigating and using the app.
+- **Persistent Theme**: Toggle between Dark and Light mode (persisted in LocalStorage).
 
-- **React 18** — UI library
-- **Vite 5** — Build tool and dev server
-- **React Router v6** — Client-side routing
-- **CSS Modules** — Scoped component styles
-- **React Icons** — Icon library
-- **LocalStorage** — Persistent preferences and history
+## 🛠️ Tech Stack
 
----
+- **Framework**: React 18
+- **Build Tool**: Vite
+- **Routing**: React Router v6
+- **Styling**: Vanilla CSS Modules (no Tailwind)
+- **Icons**: `react-icons`
+- **Math Engine**: `mathjs` (used for scientific evaluation and graphing)
 
-## Installation
+## 📦 Installation & Setup
 
-```bash
-# Clone the repository
-git clone https://github.com/umandathathsarani/CalcVerse.git
-cd CalcVerse
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/umandathathsarani/CalcVerse.git
+   cd CalcVerse
+   ```
 
-# Install dependencies
-npm install
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-# Start development server
-npm run dev
-```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
----
+4. Build for production:
+   ```bash
+   npm run build
+   ```
 
-## Running Locally
-
-```bash
-npm run dev      # Start dev server (http://localhost:5173)
-npm run build    # Build for production
-npm run preview  # Preview production build
-npm run lint     # Run ESLint
-```
-
----
-
-## Project Structure
-
-```
-calcverse/
-│
-├── public/
-│   └── favicon.svg
-│
-├── src/
-│   ├── calculators/         # Individual calculator pages
-│   │   ├── BasicCalculator.jsx
-│   │   ├── ScientificCalculator.jsx
-│   │   ├── GraphingCalculator.jsx
-│   │   ├── FinancialCalculator.jsx
-│   │   ├── ProgrammerCalculator.jsx
-│   │   └── UnitConverter.jsx
-│   │
-│   ├── components/          # Reusable UI components
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   ├── CalculatorCard.jsx
-│   │   ├── ThemeToggle.jsx
-│   │   ├── Button.jsx
-│   │   └── CalcIcons.jsx
-│   │
-│   ├── context/
-│   │   └── ThemeContext.jsx  # Dark/light theme management
-│   │
-│   ├── data/
-│   │   └── calculators.js   # Calculator metadata (single source of truth)
-│   │
-│   ├── pages/               # Route-level page components
-│   │   ├── Home.jsx
-│   │   ├── Calculators.jsx
-│   │   ├── History.jsx
-│   │   └── About.jsx
-│   │
-│   ├── App.jsx              # Root component with routing
-│   ├── main.jsx             # React entry point
-│   └── index.css            # Global design system & CSS tokens
-│
-├── index.html
-├── package.json
-├── vite.config.js
-└── README.md
-```
-
----
-
-## Routes
-
-| Path | Page |
-|---|---|
-| `/` | Home page |
-| `/calculators` | All calculators |
-| `/calculators/basic` | Basic Calculator |
-| `/calculators/scientific` | Scientific Calculator |
-| `/calculators/graphing` | Graphing Calculator |
-| `/calculators/financial` | Financial Calculator |
-| `/calculators/programmer` | Programmer Calculator |
-| `/calculators/unit-converter` | Unit Converter |
-| `/history` | Calculation history |
-| `/about` | About page |
-
----
-
-## Future Improvements
-
-- Date & Age Calculator
-- BMI & Health Calculator
-- Matrix Calculator
-- Statistics Calculator
-- Fraction Calculator
-- Currency Converter (live rates)
-- Probability Calculator
-- PWA support (offline mode)
-- Export calculations to PDF
-
----
-
-## Contributing
-
-This is a personal portfolio project. Feedback and suggestions are welcome via GitHub Issues.
-
----
-
-## License
-
-MIT © 2026 [umandathathsarani](https://github.com/umandathathsarani)
+## 📜 License
+This project is licensed under the MIT License.

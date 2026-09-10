@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { HiStar, HiOutlineStar, HiArrowsRightLeft } from 'react-icons/hi2';
 import CopyButton from '../components/CopyButton';
 import styles from './UnitConverter.module.css';
@@ -156,7 +156,7 @@ const CATEGORIES = [
   {
     id: 'currency',
     label: 'Currency',
-    explainer: 'Approximate exchange rates relative to <strong>USD ($)</strong>. These are hardcoded approximate values — use a live rate service for precision trading.',
+    explainer: 'Exchange rates relative to <strong>USD ($)</strong>. Fetches live rates when available, otherwise falls back to hardcoded approximations.',
     units: [
       { label: 'US Dollar (USD)',           toBase: 1 },
       { label: 'Euro (EUR)',                toBase: 1.08 },
@@ -222,7 +222,43 @@ export default function UnitConverter() {
   };
   const isFav = (catId, unitIdx) => !!favourites[`${catId}:${unitIdx}`];
 
-  const category = CATEGORIES.find(c => c.id === activeCategory);
+  const [liveRates, setLiveRates] = useState(null);
+  const [fetchingRates, setFetchingRates] = useState(false);
+
+  useEffect(() => {
+    if (activeCategory === 'currency' && !liveRates && !fetchingRates) {
+      setFetchingRates(true);
+      fetch('https://open.er-api.com/v6/latest/USD')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.rates) {
+            setLiveRates(data.rates);
+          }
+        })
+        .catch(err => console.error("Failed to fetch live rates:", err))
+        .finally(() => setFetchingRates(false));
+    }
+  }, [activeCategory, liveRates, fetchingRates]);
+
+  const category = useMemo(() => {
+    const baseCat = CATEGORIES.find(c => c.id === activeCategory);
+    if (activeCategory === 'currency' && liveRates) {
+      // Create a cloned category with updated toBase rates
+      return {
+        ...baseCat,
+        units: baseCat.units.map(u => {
+          // Extract currency code from label, e.g., "Euro (EUR)" -> "EUR"
+          const codeMatch = u.label.match(/\(([A-Z]{3})\)/);
+          const code = codeMatch ? codeMatch[1] : null;
+          if (code && liveRates[code]) {
+            return { ...u, toBase: 1 / liveRates[code] }; // toBase means how many of this unit make 1 USD
+          }
+          return u;
+        })
+      };
+    }
+    return baseCat;
+  }, [activeCategory, liveRates]);
 
   // Derived: result value
   const result = useMemo(() => {
@@ -376,10 +412,15 @@ export default function UnitConverter() {
         )}
 
         {/* Explainer */}
-        <div
-          className={styles.explainer}
-          dangerouslySetInnerHTML={{ __html: `<strong>What this converts:</strong> ${category.explainer}` }}
-        />
+        <div className={styles.explainer}>
+          <p dangerouslySetInnerHTML={{ __html: `<strong>What this converts:</strong> ${category.explainer}` }} />
+          {activeCategory === 'currency' && fetchingRates && (
+            <p style={{ color: 'var(--accent)', fontSize: '0.8rem', marginTop: '0.5rem', fontWeight: 600 }}>Fetching live rates...</p>
+          )}
+          {activeCategory === 'currency' && liveRates && !fetchingRates && (
+            <p style={{ color: 'var(--success, #10B981)', fontSize: '0.8rem', marginTop: '0.5rem', fontWeight: 600 }}>Using live rates from open.er-api.com</p>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import * as math from 'mathjs';
+import CopyButton from '../components/CopyButton';
 import styles from './GraphingCalculator.module.css';
 
 export default function GraphingCalculator() {
@@ -19,6 +20,20 @@ export default function GraphingCalculator() {
     yMin: -10,
     yMax: 10
   });
+
+  const [evalX, setEvalX] = useState('');
+  const [tableConfig, setTableConfig] = useState({ start: '-5', end: '5', step: '1' });
+  const [showTable, setShowTable] = useState(false);
+
+  // Export canvas as PNG
+  const exportPNG = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'calcverse-graph.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
 
   const updateEquation = (id, text) => {
     setEquations(prev => prev.map(eq => eq.id === id ? { ...eq, text } : eq));
@@ -396,6 +411,105 @@ export default function GraphingCalculator() {
               <button className={styles.btn} onClick={zoomIn}>Zoom In</button>
             </div>
             <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={resetZoom}>Reset View</button>
+            <button className={styles.btn} onClick={exportPNG}>⬇ Export PNG</button>
+          </div>
+          
+          <div className={styles.evalBox}>
+            <div className={styles.evalHeader}>Evaluate</div>
+            <div className={styles.evalInputWrapper}>
+              <span className={styles.evalPrefix}>x =</span>
+              <input 
+                type="text" 
+                className={styles.evalInput} 
+                value={evalX} 
+                onChange={e => setEvalX(e.target.value)} 
+                placeholder="0"
+                spellCheck="false"
+              />
+            </div>
+            
+            {evalX !== '' && !isNaN(parseFloat(evalX)) && (
+              <div className={styles.evalResults}>
+                {equations.filter(eq => eq.visible && eq.text.trim()).map(eq => {
+                  try {
+                    const expr = math.compile(eq.text);
+                    const y = expr.evaluate({ x: parseFloat(evalX) });
+                    return (
+                      <div key={eq.id} className={styles.evalResultItem}>
+                        <span style={{color: eq.color, fontWeight: 600}}>y =</span>
+                        <span>{isFinite(y) ? parseFloat(y.toPrecision(7)) : 'Undefined'}</span>
+                      </div>
+                    );
+                  } catch (e) {
+                    return null;
+                  }
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Table of Values */}
+          <div className={styles.evalBox}>
+            <div className={styles.evalHeader}>
+              Table of Values
+              <button onClick={() => setShowTable(p => !p)} style={{ marginLeft: '0.5rem', background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontWeight: 700, fontSize: '0.8rem' }}>
+                {showTable ? 'hide' : 'show'}
+              </button>
+            </div>
+            {showTable && (
+              <>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  {[['start', 'x start'], ['end', 'x end'], ['step', 'step']].map(([k, label]) => (
+                    <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', flex: 1, minWidth: '60px' }}>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600 }}>{label}</span>
+                      <input
+                        type="number"
+                        className={styles.evalInput}
+                        style={{ background: 'var(--bg-input)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '0.35rem 0.5rem', color: 'var(--text-primary)', width: '100%' }}
+                        value={tableConfig[k]}
+                        onChange={e => setTableConfig(prev => ({ ...prev, [k]: e.target.value }))}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ textAlign: 'left', padding: '0.4rem', color: 'var(--text-muted)', borderBottom: '1px solid var(--border)' }}>x</th>
+                        {equations.filter(eq => eq.visible && eq.text.trim()).map(eq => (
+                          <th key={eq.id} style={{ textAlign: 'right', padding: '0.4rem', color: eq.color, borderBottom: '1px solid var(--border)' }}>y</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(() => {
+                        const s = parseFloat(tableConfig.start);
+                        const e = parseFloat(tableConfig.end);
+                        const step = parseFloat(tableConfig.step);
+                        if (isNaN(s) || isNaN(e) || isNaN(step) || step <= 0) return null;
+                        const rows = [];
+                        for (let x = s; x <= e + 1e-10; x = parseFloat((x + step).toPrecision(10))) {
+                          rows.push(
+                            <tr key={x} style={{ borderBottom: '1px solid var(--border)' }}>
+                              <td style={{ padding: '0.35rem 0.4rem', color: 'var(--text-secondary)' }}>{parseFloat(x.toPrecision(6))}</td>
+                              {equations.filter(eq => eq.visible && eq.text.trim()).map(eq => {
+                                try {
+                                  const y = math.compile(eq.text).evaluate({ x });
+                                  return <td key={eq.id} style={{ textAlign: 'right', padding: '0.35rem 0.4rem', color: 'var(--text-primary)' }}>{isFinite(y) ? parseFloat(y.toPrecision(6)) : '—'}</td>;
+                                } catch { return <td key={eq.id} style={{ textAlign: 'right', color: 'var(--danger)', padding: '0.35rem 0.4rem' }}>Err</td>; }
+                              })}
+                            </tr>
+                          );
+                          if (rows.length > 100) break;
+                        }
+                        return rows;
+                      })()}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

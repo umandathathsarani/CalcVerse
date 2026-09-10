@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useHistory } from '../context/HistoryContext';
+import CopyButton from '../components/CopyButton';
 import styles from './BasicCalculator.module.css';
 
 const MAX_DIGITS = 15;
@@ -10,6 +11,7 @@ export default function BasicCalculator() {
   const [previous, setPrevious] = useState('');
   const [operation, setOperation] = useState(null);
   const [isNewInput, setIsNewInput] = useState(true);
+  const [memory, setMemory] = useState(0);
 
   // Format numbers to look nice (add commas, handle decimals)
   const formatNumber = (num) => {
@@ -142,6 +144,23 @@ export default function BasicCalculator() {
     setIsNewInput(true);
   }, [current]);
 
+  // Memory functions
+  const memoryClear = () => setMemory(0);
+  const memoryRecall = () => {
+    setCurrent(memory.toString());
+    setIsNewInput(true);
+  };
+  const memoryAdd = () => {
+    if (current === 'Error') return;
+    setMemory(prev => prev + parseFloat(current));
+    setIsNewInput(true);
+  };
+  const memorySubtract = () => {
+    if (current === 'Error') return;
+    setMemory(prev => prev - parseFloat(current));
+    setIsNewInput(true);
+  };
+
   // Keyboard support
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -193,9 +212,19 @@ export default function BasicCalculator() {
           <div className={styles.previous}>
             {previous ? `${formatNumber(previous)} ${operation}` : ''}
           </div>
-          <div className={styles.current}>
-            {current === 'Error' ? 'Error' : formatNumber(current)}
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '0.5rem' }}>
+            <div className={styles.current} style={{ flex: 1, textAlign: 'right' }}>
+              {current === 'Error' ? 'Error' : formatNumber(current)}
+            </div>
+            <CopyButton text={current === 'Error' ? '' : current} />
           </div>
+        </div>
+
+        <div className={styles.memoryRow}>
+          <button className={styles.memBtn} onClick={memoryClear}>MC</button>
+          <button className={styles.memBtn} onClick={memoryRecall}>MR</button>
+          <button className={styles.memBtn} onClick={memoryAdd}>M+</button>
+          <button className={styles.memBtn} onClick={memorySubtract}>M-</button>
         </div>
 
         <div className={styles.keypad}>

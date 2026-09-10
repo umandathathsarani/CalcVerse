@@ -5,7 +5,7 @@
 
 .header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .title {
@@ -13,7 +13,7 @@
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.03em;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .desc {
@@ -24,6 +24,7 @@
   line-height: 1.7;
 }
 
+/* ── Empty state ── */
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -64,13 +65,243 @@
   line-height: 1.6;
 }
 
-.comingSoonBadge {
-  font-size: 0.75rem;
+.startLink {
+  color: var(--accent);
   font-weight: 600;
-  padding: 0.3rem 0.875rem;
-  border-radius: var(--radius-full);
+  text-decoration: none;
+  padding: 0.6rem 1.5rem;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.startLink:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── Layout ── */
+.historyLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.searchInput {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.65rem 1rem 0.65rem 2.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+.searchInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.filterTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filterTab {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.filterTab:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.filterTabActive {
   background: var(--accent-light);
   color: var(--accent);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  letter-spacing: 0.03em;
+  border-color: var(--accent);
+}
+
+.clearBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.clearBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #EF4444;
+  color: #EF4444;
+}
+
+/* ── Count ── */
+.countLabel {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.noResults {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 3rem;
+  font-size: 0.95rem;
+}
+
+/* ── Entries ── */
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.25rem;
+  transition: var(--transition);
+}
+
+.entry:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-hover);
+}
+
+.entryLeft {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.entryBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--radius-full);
+  border: 1px solid;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.entryExpression {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
+}
+
+.entryResult {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.entryTime {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.entryActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.deleteBtn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #EF4444;
+  color: #EF4444;
+}
+
+/* ── Old styles kept for compat ── */
+.comingSoonBadge {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .entryExpression {
+    max-width: 160px;
+  }
+
+  .entryTime {
+    display: none;
+  }
 }

@@ -1,352 +1,245 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useHistory } from '../context/HistoryContext';
+import CopyButton from '../components/CopyButton';
 import styles from './ScientificCalculator.module.css';
+import * as math from 'mathjs';
 
 const MAX_DIGITS = 15;
 
 export default function ScientificCalculator() {
   const { addHistoryEntry } = useHistory();
-  const [current, setCurrent] = useState('0');
-  const [previous, setPrevious] = useState('');
-  const [operation, setOperation] = useState(null);
-  const [isNewInput, setIsNewInput] = useState(true);
+  const [expression, setExpression] = useState('');
+  const [result, setResult] = useState('0');
+  const [memory, setMemory] = useState(0);
   
   // Scientific toggles
   const [isDeg, setIsDeg] = useState(true);
   const [isInv, setIsInv] = useState(false);
+  const [isHyp, setIsHyp] = useState(false);
+  const [hasEvaluated, setHasEvaluated] = useState(false);
 
-  // Format numbers to look nice
-  const formatNumber = (num) => {
-    if (!num) return '';
-    if (num === '-' || num === 'Error') return num;
-    
-    // Handle e notation natively or if extremely large
-    if (num.toString().includes('e')) {
-      return parseFloat(num).toPrecision(7);
-    }
-    
-    const [integer, decimal] = num.toString().split('.');
-    if (integer === '') return num;
+  // Evaluate math expression
+  const evaluateExpression = (exprStr, degMode) => {
+    try {
+      if (!exprStr) return 0;
+      
+      const scope = {
+         sin: (x) => degMode ? Math.sin(x * Math.PI / 180) : Math.sin(x),
+         cos: (x) => degMode ? Math.cos(x * Math.PI / 180) : Math.cos(x),
+         tan: (x) => degMode ? Math.tan(x * Math.PI / 180) : Math.tan(x),
+         asin: (x) => degMode ? Math.asin(x) * 180 / Math.PI : Math.asin(x),
+         acos: (x) => degMode ? Math.acos(x) * 180 / Math.PI : Math.acos(x),
+         atan: (x) => degMode ? Math.atan(x) * 180 / Math.PI : Math.atan(x),
+         sinh: (x) => Math.sinh(x),
+         cosh: (x) => Math.cosh(x),
+         tanh: (x) => Math.tanh(x),
+         asinh: (x) => Math.asinh(x),
+         acosh: (x) => Math.acosh(x),
+         atanh: (x) => Math.atanh(x),
+         log: (x, base) => base ? Math.log(x) / Math.log(base) : Math.log10(x),
+         ln: (x) => Math.log(x),
+         pi: Math.PI,
+         e: Math.E,
+      };
 
-    let formattedInt = parseFloat(integer);
-    if (isNaN(formattedInt)) return '';
-    
-    formattedInt = new Intl.NumberFormat('en-US').format(formattedInt);
-    
-    if (decimal != null) {
-      return `${formattedInt}.${decimal}`;
+      // Clean up UI symbols for mathjs
+      let cleanExpr = exprStr
+        .replace(/×/g, '*')
+        .replace(/÷/g, '/')
+        .replace(/√\(/g, 'sqrt(')
+        .replace(/²/g, '^2')
+        .replace(/³/g, '^3')
+        .replace(/π/g, 'pi')
+        .replace(/e/g, 'e');
+
+      const res = math.evaluate(cleanExpr, scope);
+      if (res === undefined || isNaN(res) || !isFinite(res)) throw new Error('Error');
+      
+      // Fix tiny floating point errors from JS math (e.g. sin(180) = 1.22e-16)
+      if (Math.abs(res) < 1e-10) return 0;
+      
+      return parseFloat(res.toPrecision(MAX_DIGITS));
+    } catch (err) {
+      return 'Error';
     }
-    return formattedInt;
   };
 
-  const handleDigit = useCallback((digit) => {
-    if (isNewInput) {
-      if (digit === '.') {
-        setCurrent('0.');
+  const formatNumber = (num) => {
+    if (num === 'Error') return 'Error';
+    if (!num && num !== 0) return '';
+    const strNum = num.toString();
+    if (strNum.includes('e')) return parseFloat(num).toPrecision(7);
+    
+    const [integer, decimal] = strNum.split('.');
+    let formattedInt = parseInt(integer, 10);
+    if (isNaN(formattedInt)) return strNum;
+    
+    formattedInt = new Intl.NumberFormat('en-US').format(formattedInt);
+    return decimal != null ? `${formattedInt}.${decimal}` : formattedInt;
+  };
+
+  const handleInput = useCallback((val) => {
+    if (hasEvaluated) {
+      // If typing an operator after equals, continue the equation from the result
+      if (/[\+\-\×\÷\^]/.test(val)) {
+        setExpression(result !== 'Error' ? result.toString() + val : val);
       } else {
-        setCurrent(digit);
+        setExpression(val);
       }
-      setIsNewInput(false);
+      setHasEvaluated(false);
       return;
     }
-    
-    if (digit === '.' && current.includes('.')) return;
-    if (current.replace(/[^0-9]/g, '').length >= MAX_DIGITS) return;
-    
-    if (current === '0' && digit !== '.') {
-      setCurrent(digit);
-    } else {
-      setCurrent(prev => prev + digit);
-    }
-  }, [current, isNewInput]);
-
-  const handleOperation = useCallback((op) => {
-    if (current === 'Error') return;
-    
-    if (previous !== '' && !isNewInput) {
-      calculate();
-    }
-    
-    // For x^y, we use '^'
-    // For y root x, we use 'y√x'
-    setOperation(op);
-    setPrevious(current);
-    setIsNewInput(true);
-  }, [current, previous, isNewInput]);
+    setExpression(prev => prev + val);
+  }, [hasEvaluated, result]);
 
   const calculate = useCallback(() => {
-    if (!previous || !current || !operation) return;
+    if (!expression) return;
+    const evaluated = evaluateExpression(expression, isDeg);
     
-    const prevNum = parseFloat(previous);
-    const currentNum = parseFloat(current);
-    
-    if (isNaN(prevNum) || isNaN(currentNum)) return;
-    
-    let result = 0;
-    switch (operation) {
-      case '+': result = prevNum + currentNum; break;
-      case '-': result = prevNum - currentNum; break;
-      case '×': result = prevNum * currentNum; break;
-      case '÷': 
-        if (currentNum === 0) {
-          setCurrent('Error');
-          setPrevious('');
-          setOperation(null);
-          setIsNewInput(true);
-          return;
-        }
-        result = prevNum / currentNum; 
-        break;
-      case '^': result = Math.pow(prevNum, currentNum); break;
-      case 'y√x': 
-        if (prevNum < 0 && currentNum % 2 === 0) {
-           setCurrent('Error');
-           setPrevious('');
-           setOperation(null);
-           setIsNewInput(true);
-           return;
-        }
-        // y root x is x^(1/y) -- but prevNum is x, currentNum is y, or vice versa?
-        // Standard is: previous is x, current is y -> x^(1/y)
-        result = Math.pow(prevNum, 1 / currentNum); 
-        break;
-      case 'EXP':
-        result = prevNum * Math.pow(10, currentNum);
-        break;
-      default: return;
+    setResult(evaluated);
+    setHasEvaluated(true);
+
+    if (evaluated !== 'Error') {
+      addHistoryEntry('Scientific', expression, evaluated.toString());
     }
-    
-    result = parseFloat(result.toPrecision(MAX_DIGITS));
-    const resultStr = result.toString();
-    
-    addHistoryEntry(
-      'Scientific',
-      `${formatNumber(previous)} ${operation} ${formatNumber(current)}`,
-      formatNumber(resultStr)
-    );
-    
-    setCurrent(resultStr);
-    setPrevious('');
-    setOperation(null);
-    setIsNewInput(true);
-  }, [current, previous, operation, addHistoryEntry]);
-
-  const handleImmediateFunc = useCallback((func) => {
-    if (current === 'Error') return;
-    const num = parseFloat(current);
-    if (isNaN(num)) return;
-
-    let result = 0;
-    let expStr = '';
-
-    const toRad = (d) => d * (Math.PI / 180);
-    const fromRad = (r) => r * (180 / Math.PI);
-
-    switch (func) {
-      case 'sin':
-        result = isDeg ? Math.sin(toRad(num)) : Math.sin(num);
-        expStr = `sin(${num})`;
-        break;
-      case 'cos':
-        result = isDeg ? Math.cos(toRad(num)) : Math.cos(num);
-        expStr = `cos(${num})`;
-        break;
-      case 'tan':
-        result = isDeg ? Math.tan(toRad(num)) : Math.tan(num);
-        expStr = `tan(${num})`;
-        break;
-      case 'asin':
-        result = isDeg ? fromRad(Math.asin(num)) : Math.asin(num);
-        expStr = `sin⁻¹(${num})`;
-        break;
-      case 'acos':
-        result = isDeg ? fromRad(Math.acos(num)) : Math.acos(num);
-        expStr = `cos⁻¹(${num})`;
-        break;
-      case 'atan':
-        result = isDeg ? fromRad(Math.atan(num)) : Math.atan(num);
-        expStr = `tan⁻¹(${num})`;
-        break;
-      case 'ln':
-        if (num <= 0) { result = 'Error'; break; }
-        result = Math.log(num);
-        expStr = `ln(${num})`;
-        break;
-      case 'log':
-        if (num <= 0) { result = 'Error'; break; }
-        result = Math.log10(num);
-        expStr = `log(${num})`;
-        break;
-      case 'ex':
-        result = Math.exp(num);
-        expStr = `e^${num}`;
-        break;
-      case '10x':
-        result = Math.pow(10, num);
-        expStr = `10^${num}`;
-        break;
-      case 'sqrt':
-        if (num < 0) { result = 'Error'; break; }
-        result = Math.sqrt(num);
-        expStr = `√${num}`;
-        break;
-      case 'cbrt':
-        result = Math.cbrt(num);
-        expStr = `³√${num}`;
-        break;
-      case 'sq':
-        result = Math.pow(num, 2);
-        expStr = `${num}²`;
-        break;
-      case 'cube':
-        result = Math.pow(num, 3);
-        expStr = `${num}³`;
-        break;
-      case 'fact':
-        if (num < 0 || !Number.isInteger(num)) { result = 'Error'; break; }
-        let f = 1;
-        for (let i = 2; i <= num; i++) f *= i;
-        result = f;
-        expStr = `${num}!`;
-        break;
-      case 'inv':
-        if (num === 0) { result = 'Error'; break; }
-        result = 1 / num;
-        expStr = `1/${num}`;
-        break;
-      default:
-        return;
-    }
-
-    if (result === 'Error' || isNaN(result)) {
-      setCurrent('Error');
-    } else {
-      // Fix floating point quirks for trig functions (e.g. cos(90 deg) = 6.123233995736766e-17)
-      if (Math.abs(result) < 1e-10) result = 0;
-      
-      result = parseFloat(result.toPrecision(MAX_DIGITS));
-      const resStr = result.toString();
-      addHistoryEntry('Scientific', expStr, formatNumber(resStr));
-      setCurrent(resStr);
-    }
-    setIsNewInput(true);
-  }, [current, isDeg, addHistoryEntry]);
-
-  const insertConstant = useCallback((constant) => {
-    let val = 0;
-    if (constant === 'pi') val = Math.PI;
-    if (constant === 'e') val = Math.E;
-    
-    val = parseFloat(val.toPrecision(MAX_DIGITS)).toString();
-    setCurrent(val);
-    setIsNewInput(true);
-  }, []);
+  }, [expression, isDeg, addHistoryEntry]);
 
   const clearAll = useCallback(() => {
-    setCurrent('0');
-    setPrevious('');
-    setOperation(null);
-    setIsNewInput(true);
+    setExpression('');
+    setResult('0');
+    setHasEvaluated(false);
   }, []);
 
-  const deleteDigit = useCallback(() => {
-    if (isNewInput || current === 'Error') return;
-    
-    if (current.length === 1 || (current.length === 2 && current.startsWith('-'))) {
-      setCurrent('0');
-      setIsNewInput(true);
-    } else {
-      setCurrent(prev => prev.slice(0, -1));
+  const deleteChar = useCallback(() => {
+    if (hasEvaluated) {
+      clearAll();
+      return;
     }
-  }, [current, isNewInput]);
+    setExpression(prev => prev.slice(0, -1));
+  }, [hasEvaluated, clearAll]);
 
-  const toggleSign = useCallback(() => {
-    if (current === '0' || current === 'Error') return;
-    if (current.startsWith('-')) {
-      setCurrent(current.slice(1));
-    } else {
-      setCurrent('-' + current);
-    }
-  }, [current]);
+  // Memory functions
+  const memoryClear = () => setMemory(0);
+  const memoryRecall = () => handleInput(memory.toString());
+  const memoryAdd = () => {
+    const val = hasEvaluated ? result : evaluateExpression(expression, isDeg);
+    if (val !== 'Error') setMemory(prev => prev + parseFloat(val));
+  };
+  const memorySubtract = () => {
+    const val = hasEvaluated ? result : evaluateExpression(expression, isDeg);
+    if (val !== 'Error') setMemory(prev => prev - parseFloat(val));
+  };
+  const memoryStore = () => {
+    const val = hasEvaluated ? result : evaluateExpression(expression, isDeg);
+    if (val !== 'Error') setMemory(parseFloat(val));
+  };
 
-  const handlePercentage = useCallback(() => {
-    if (current === 'Error') return;
-    const num = parseFloat(current);
-    if (isNaN(num)) return;
-    
-    const result = (num / 100).toString();
-    setCurrent(result);
-    setIsNewInput(true);
-  }, [current]);
+  // Helper to get function name based on inv/hyp state
+  const getTrigFunc = (base) => {
+    let name = base;
+    if (isHyp) name = name + 'h';
+    if (isInv) name = 'a' + name;
+    return name;
+  };
+
+  const getTrigLabel = (base) => {
+    let label = base;
+    if (isHyp) label = label + 'h';
+    if (isInv) label = label + '⁻¹';
+    return label;
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.calculator}>
         <div className={styles.topBar}>
-          <button 
-            className={`${styles.toggleBtn} ${isDeg ? styles.toggleBtnActive : ''}`}
-            onClick={() => setIsDeg(true)}
-          >
-            DEG
-          </button>
-          <button 
-            className={`${styles.toggleBtn} ${!isDeg ? styles.toggleBtnActive : ''}`}
-            onClick={() => setIsDeg(false)}
-          >
-            RAD
-          </button>
+          <button className={`${styles.toggleBtn} ${isDeg ? styles.toggleBtnActive : ''}`} onClick={() => setIsDeg(true)}>DEG</button>
+          <button className={`${styles.toggleBtn} ${!isDeg ? styles.toggleBtnActive : ''}`} onClick={() => setIsDeg(false)}>RAD</button>
         </div>
 
         <div className={styles.display}>
-          <div className={styles.previous}>
-            {previous ? `${formatNumber(previous)} ${operation}` : ''}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+            <div className={styles.previous} style={{ flex: 1 }}>{expression || '\u00A0'}</div>
+            <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexShrink: 0 }}>
+              {/* Unclosed parentheses badge */}
+              {(() => {
+                const open  = (expression.match(/\(/g) || []).length;
+                const close = (expression.match(/\)/g) || []).length;
+                const diff = open - close;
+                return diff > 0 ? (
+                  <span title={`${diff} unclosed parenthesis`} style={{
+                    background: 'var(--accent-light)', color: 'var(--accent)',
+                    border: '1px solid var(--accent)', borderRadius: 'var(--radius-sm)',
+                    fontSize: '0.7rem', fontWeight: 700, padding: '0.1rem 0.4rem',
+                  }}>
+                    ({diff}
+                  </span>
+                ) : null;
+              })()}
+              <CopyButton text={expression} />
+            </div>
           </div>
-          <div className={styles.current}>
-            {current === 'Error' ? 'Error' : formatNumber(current)}
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '0.5rem' }}>
+            <div className={styles.current} style={{ flex: 1, textAlign: 'right' }}>{formatNumber(result)}</div>
+            <CopyButton text={result !== 'Error' ? result : ''} />
           </div>
+        </div>
+
+        <div className={styles.memoryRow}>
+          <button className={styles.memBtn} onClick={memoryClear}>MC</button>
+          <button className={styles.memBtn} onClick={memoryRecall}>MR</button>
+          <button className={styles.memBtn} onClick={memoryAdd}>M+</button>
+          <button className={styles.memBtn} onClick={memorySubtract}>M-</button>
+          <button className={styles.memBtn} onClick={memoryStore}>MS</button>
         </div>
 
         <div className={styles.keypad}>
           {/* Row 1 */}
           <button className={`${styles.btn} ${styles.btnSecondary} ${isInv ? styles.toggleBtnActive : ''}`} onClick={() => setIsInv(!isInv)}>INV</button>
-          <button className={`${styles.btn} ${styles.btnSecondary} ${styles.hideMobile}`} onClick={() => insertConstant('pi')}>π</button>
-          <button className={`${styles.btn} ${styles.btnSecondary} ${styles.hideMobile}`} onClick={() => insertConstant('e')}>e</button>
+          <button className={`${styles.btn} ${styles.btnSecondary} ${isHyp ? styles.toggleBtnActive : ''}`} onClick={() => setIsHyp(!isHyp)}>HYP</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput('(')}>(</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput(')')}>)</button>
           <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={clearAll}>AC</button>
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={deleteDigit}>⌫</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={deleteChar}>⌫</button>
 
           {/* Row 2 */}
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleImmediateFunc(isInv ? 'asin' : 'sin')}>{isInv ? 'sin⁻¹' : 'sin'}</button>
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleImmediateFunc(isInv ? 'acos' : 'cos')}>{isInv ? 'cos⁻¹' : 'cos'}</button>
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleImmediateFunc(isInv ? 'atan' : 'tan')}>{isInv ? 'tan⁻¹' : 'tan'}</button>
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleOperation('EXP')}>EXP</button>
-          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleOperation('÷')}>÷</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput(getTrigFunc('sin') + '(')}>{getTrigLabel('sin')}</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput(getTrigFunc('cos') + '(')}>{getTrigLabel('cos')}</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput(getTrigFunc('tan') + '(')}>{getTrigLabel('tan')}</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput('%')}>%</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput('!')}>x!</button>
+          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleInput('÷')}>÷</button>
 
           {/* Row 3 */}
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleImmediateFunc(isInv ? 'ex' : 'ln')}>{isInv ? 'eˣ' : 'ln'}</button>
-          <button className={styles.btn} onClick={() => handleDigit('7')}>7</button>
-          <button className={styles.btn} onClick={() => handleDigit('8')}>8</button>
-          <button className={styles.btn} onClick={() => handleDigit('9')}>9</button>
-          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleOperation('×')}>×</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput(isInv ? 'e^(' : 'ln(')}>{isInv ? 'eˣ' : 'ln'}</button>
+          <button className={styles.btn} onClick={() => handleInput('7')}>7</button>
+          <button className={styles.btn} onClick={() => handleInput('8')}>8</button>
+          <button className={styles.btn} onClick={() => handleInput('9')}>9</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput('mod(')}>mod</button>
+          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleInput('×')}>×</button>
 
           {/* Row 4 */}
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleImmediateFunc(isInv ? '10x' : 'log')}>{isInv ? '10ˣ' : 'log'}</button>
-          <button className={styles.btn} onClick={() => handleDigit('4')}>4</button>
-          <button className={styles.btn} onClick={() => handleDigit('5')}>5</button>
-          <button className={styles.btn} onClick={() => handleDigit('6')}>6</button>
-          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleOperation('-')}>-</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput(isInv ? '10^(' : 'log(')}>{isInv ? '10ˣ' : 'log'}</button>
+          <button className={styles.btn} onClick={() => handleInput('4')}>4</button>
+          <button className={styles.btn} onClick={() => handleInput('5')}>5</button>
+          <button className={styles.btn} onClick={() => handleInput('6')}>6</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput('log(')}>logᵧx</button>
+          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleInput('-')}>-</button>
 
           {/* Row 5 */}
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleImmediateFunc(isInv ? 'sq' : 'sqrt')}>{isInv ? 'x²' : '√x'}</button>
-          <button className={styles.btn} onClick={() => handleDigit('1')}>1</button>
-          <button className={styles.btn} onClick={() => handleDigit('2')}>2</button>
-          <button className={styles.btn} onClick={() => handleDigit('3')}>3</button>
-          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleOperation('+')}>+</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput(isInv ? '²' : '√(')}>{isInv ? 'x²' : '√x'}</button>
+          <button className={styles.btn} onClick={() => handleInput('1')}>1</button>
+          <button className={styles.btn} onClick={() => handleInput('2')}>2</button>
+          <button className={styles.btn} onClick={() => handleInput('3')}>3</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput('1/(')}>1/x</button>
+          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => handleInput('+')}>+</button>
 
           {/* Row 6 */}
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleOperation('^')}>xʸ</button>
-          <button className={styles.btn} onClick={toggleSign}>+/-</button>
-          <button className={styles.btn} onClick={() => handleDigit('0')}>0</button>
-          <button className={styles.btn} onClick={() => handleDigit('.')}>.</button>
+          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleInput('^')}>xʸ</button>
+          <button className={styles.btn} onClick={() => handleInput('0')}>0</button>
+          <button className={styles.btn} onClick={() => handleInput('.')}>.</button>
+          <button className={styles.btn} onClick={() => handleInput('π')}>π</button>
+          <button className={styles.btn} onClick={() => handleInput('e')}>e</button>
           <button className={`${styles.btn} ${styles.btnEqual}`} onClick={calculate}>=</button>
         </div>
       </div>

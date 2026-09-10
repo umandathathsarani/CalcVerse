@@ -9,7 +9,7 @@
 
 .calculator {
   width: 100%;
-  max-width: 600px;
+  max-width: 750px;
   background: var(--bg-surface);
   border-radius: var(--radius-xl);
   padding: 1.5rem;
@@ -81,9 +81,40 @@
   border-color: var(--accent);
 }
 
+.memoryRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: -0.5rem;
+}
+
+.memBtn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  flex: 1;
+}
+
+.memBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+}
+
+.memBtnActive {
+  color: var(--accent);
+  border-color: var(--accent-light);
+  background: var(--accent-light);
+}
+
 .keypad {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.6rem;
 }
 

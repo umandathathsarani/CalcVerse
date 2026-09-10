@@ -25,7 +25,7 @@ export const calculators = [
     tagline: 'Advanced math, made accessible.',
     description:
       'Tackle complex mathematics with a full-featured scientific calculator. Trigonometry, logarithms, exponents, constants — all in one place.',
-    features: ['Trigonometry (sin, cos, tan + inverses)', 'Logarithms (log, ln)', 'Powers, roots & factorials', 'Constants: π and e', 'DEG / RAD mode toggle'],
+    features: ['Trigonometry (sin, cos, tan + inverses)', 'Logarithms (log, ln)', 'Powers, roots & absolute values', 'Constants & random numbers', 'Factorials, percentages & inverses'],
     bestFor: 'University, science & engineering',
     useCases: ['Algebra', 'Calculus', 'Physics problems', 'Engineering calculations'],
     route: '/calculators/scientific',
@@ -40,7 +40,7 @@ export const calculators = [
     tagline: 'Visualize equations instantly.',
     description:
       'Plot functions on an interactive coordinate plane. Visualize equations, explore behavior, and evaluate functions at specific values.',
-    features: ['Plot multiple functions simultaneously', 'Zoom, pan & reset view', 'Grid with axis labels', 'Function evaluation at x values', 'Interactive coordinate display'],
+    features: ['Plot multiple functions simultaneously', 'Interactive zoom & pan with scroll', 'On-screen virtual math keypad', 'Function evaluation at x values', 'Grid with axis labels'],
     bestFor: 'Algebra, calculus & mathematics',
     useCases: ['Graphing functions', 'Exploring calculus', 'Comparing equations', 'Visualizing data'],
     route: '/calculators/graphing',
@@ -55,7 +55,7 @@ export const calculators = [
     tagline: 'Smart tools for your finances.',
     description:
       'Loans, compound interest, investments, and amortization schedules — everything you need to make informed financial decisions.',
-    features: ['Loan & EMI calculator', 'Compound interest calculator', 'Investment growth projections', 'Full amortization schedule', 'Multiple compounding frequencies'],
+    features: ['Loan & EMI calculator', 'Compound interest calculator', 'Savings goals & Salary projections', 'Discount & tax final prices', 'ROI & Tip splitting'],
     bestFor: 'Finance, business & personal planning',
     useCases: ['Loan planning', 'Investment analysis', 'Interest calculations', 'Mortgage planning'],
     route: '/calculators/financial',
@@ -70,7 +70,7 @@ export const calculators = [
     tagline: 'Built for developers.',
     description:
       'Work across binary, octal, decimal, and hexadecimal with full bitwise operation support. An essential tool for every developer.',
-    features: ['BIN / OCT / DEC / HEX conversion', 'Bitwise AND, OR, XOR, NOT', 'Left shift & right shift', 'Instant base conversion display', 'Developer-focused interface'],
+    features: ['BIN / OCT / DEC / HEX live display', 'Bitwise AND, OR, XOR, NOT, NAND, NOR', 'Left shift & right shift by 1 bit', '8 / 16 / 32 / 64-bit word size', 'Click any row to switch base instantly'],
     bestFor: 'Developers, CS students & engineers',
     useCases: ['Number base conversion', 'Bitwise operations', 'Debugging', 'Low-level programming'],
     route: '/calculators/programmer',
@@ -85,7 +85,7 @@ export const calculators = [
     tagline: 'Convert anything, instantly.',
     description:
       'Convert between units across length, weight, temperature, area, volume, speed, time, data, and energy — fast and accurately.',
-    features: ['9 conversion categories', 'Instant real-time conversion', 'Swap units with one click', 'Length, weight, temperature & more', 'Data & energy conversions'],
+    features: ['9 conversion categories', 'All-unit quick results grid', 'Swap units with one click', 'Temperature special formulas (°C/°F/K)', 'Click any result to set "To" unit'],
     bestFor: 'Students, engineers & everyday use',
     useCases: ['Length conversion', 'Temperature conversion', 'Data size conversion', 'Weight & volume'],
     route: '/calculators/unit-converter',

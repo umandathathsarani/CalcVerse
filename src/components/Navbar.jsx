@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { HiXMark, HiBars3 } from 'react-icons/hi2';
 import ThemeToggle from './ThemeToggle';
+import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import styles from './Navbar.module.css';
 
 const NAV_LINKS = [
@@ -66,6 +67,7 @@ export default function Navbar() {
 
             {/* Right side */}
             <div className={styles.actions}>
+              <KeyboardShortcutsModal />
               <ThemeToggle />
               <button
                 className={styles.menuButton}

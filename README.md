@@ -73,6 +73,8 @@ Convert across 10 different categories (Length, Weight, Temp, Area, Volume, Spee
 - **Persistent Theme**: Toggle between Dark and Light mode (persisted in LocalStorage).
 
 ![Modals & Features](./Screenshots/04.png)
+<br/>
+![Additional Features](./Screenshots/05.png)
 
 ## 🛠️ Tech Stack
 

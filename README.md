@@ -1,3 +1,5 @@
+<div align="center">
+
 # CalcVerse
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -10,20 +12,27 @@
 
 Built with React 18 and Vite, it focuses on providing a premium user experience through beautiful design, fluid interactions, and deep functionality.
 
-![CalcVerse Preview](./src/assets/preview-placeholder.png) *(You can replace this with a real screenshot)*
+![CalcVerse Home](./Screenshots/01.png)
+<br/>
+![CalcVerse Theme](./Screenshots/02.png)
+
+</div>
 
 ## 🚀 Features
 
 ### 1. Basic Calculator
+![Basic Calculator](./Screenshots/Basic%20Calculator.png)
 A clean, everyday calculator with standard arithmetic operations and a dedicated memory row (`MC`, `MR`, `M+`, `M-`). It tracks your running calculations in a visual history ribbon above the current input.
 
 ### 2. Scientific Calculator
+![Scientific Calculator](./Screenshots/Scientific.png)
 Designed for advanced mathematics, featuring:
 - Trigonometric functions (`sin`, `cos`, `tan`, `arcsin`, etc.) with `DEG` / `RAD` toggles.
 - Advanced functions (`log`, `ln`, `e`, `π`, roots, exponents).
 - An **Unclosed Parentheses Warning** badge to help avoid syntax errors.
 
 ### 3. Graphing Calculator
+![Graphing Calculator](./Screenshots/Graphing.png)
 A real-time function plotter powered by `mathjs` and HTML5 Canvas.
 - Plot multiple equations simultaneously with distinct colors.
 - Interactive panning and zooming.
@@ -32,6 +41,7 @@ A real-time function plotter powered by `mathjs` and HTML5 Canvas.
 - **Export**: Download your graph canvas as a PNG.
 
 ### 4. Financial Calculator
+![Financial Calculator](./Screenshots/Financial.png)
 A comprehensive suite for personal finance planning:
 - **Loan / EMI**: Calculate monthly payments and generate an Amortization Schedule (exportable as CSV).
 - **Compound Interest**: Predict future value based on varied compounding frequencies.
@@ -41,6 +51,7 @@ A comprehensive suite for personal finance planning:
 - Support for multiple global currencies.
 
 ### 5. Programmer Calculator
+![Programmer Calculator](./Screenshots/Programmer.png)
 A specialized tool for developers handling bitwise logic:
 - **Multi-Base Live Display**: See inputs evaluated simultaneously in HEX, DEC, OCT, and BIN.
 - **Bitwise Operations**: `AND`, `OR`, `XOR`, `NOT`, and bit shifting (`<<`, `>>`).
@@ -49,15 +60,19 @@ A specialized tool for developers handling bitwise logic:
 - **Two's Complement** representations for signed integers.
 
 ### 6. Unit Converter
+![Unit Converter](./Screenshots/Unit%20Converter.png)
 Convert across 10 different categories (Length, Weight, Temp, Area, Volume, Speed, Time, Data, Energy, and Currency).
 - **Live Currency Rates**: Fetches real-time exchange rates from `open.er-api.com`.
 - **Quick Results Grid**: See conversions for *all* units in a category at once.
 - **Favourites System**: Pin frequently used units for quick access (persisted in LocalStorage).
 
 ### Global App Features
+![History & More](./Screenshots/03.png)
 - **Calculation History Page**: A dedicated page storing all your calculations. You can search, filter by calculator type, copy results, and clear history.
 - **Universal Keyboard Shortcuts**: A quick-access modal (`?` key) lists shortcuts for navigating and using the app.
 - **Persistent Theme**: Toggle between Dark and Light mode (persisted in LocalStorage).
+
+![Modals & Features](./Screenshots/04.png)
 
 ## 🛠️ Tech Stack
 

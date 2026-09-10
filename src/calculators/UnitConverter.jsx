@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { HiStar, HiOutlineStar, HiArrowsRightLeft } from 'react-icons/hi2';
 import CopyButton from '../components/CopyButton';
 import styles from './UnitConverter.module.css';
 
@@ -9,7 +10,7 @@ import styles from './UnitConverter.module.css';
 const CATEGORIES = [
   {
     id: 'length',
-    label: '📏 Length',
+    label: 'Length',
     explainer: 'Convert distances — from nanometers to light-years. The base unit is the <strong>metre (m)</strong>.',
     units: [
       { label: 'Kilometre (km)',   toBase: 1000 },
@@ -27,7 +28,7 @@ const CATEGORIES = [
   },
   {
     id: 'weight',
-    label: '⚖️ Weight',
+    label: 'Weight',
     explainer: 'Convert mass — from micrograms to metric tonnes. The base unit is the <strong>kilogram (kg)</strong>.',
     units: [
       { label: 'Metric Tonne (t)',    toBase: 1000 },
@@ -43,7 +44,7 @@ const CATEGORIES = [
   },
   {
     id: 'temperature',
-    label: '🌡️ Temperature',
+    label: 'Temperature',
     explainer: 'Convert temperatures between Celsius, Fahrenheit, and Kelvin. Unlike other categories, these use <strong>special formulas</strong> — not simple multiplication.',
     isTemp: true,
     units: [
@@ -54,7 +55,7 @@ const CATEGORIES = [
   },
   {
     id: 'area',
-    label: '🔲 Area',
+    label: 'Area',
     explainer: 'Convert areas — from square millimetres to square kilometres and acres. The base unit is the <strong>square metre (m²)</strong>.',
     units: [
       { label: 'Square Kilometre (km²)', toBase: 1e6 },
@@ -71,7 +72,7 @@ const CATEGORIES = [
   },
   {
     id: 'volume',
-    label: '🧪 Volume',
+    label: 'Volume',
     explainer: 'Convert volumes — from millilitres to cubic metres. The base unit is the <strong>litre (L)</strong>.',
     units: [
       { label: 'Cubic Metre (m³)',   toBase: 1000 },
@@ -90,7 +91,7 @@ const CATEGORIES = [
   },
   {
     id: 'speed',
-    label: '💨 Speed',
+    label: 'Speed',
     explainer: 'Convert speeds — from metres per second to the speed of light. The base unit is <strong>metres per second (m/s)</strong>.',
     units: [
       { label: 'Metres/second (m/s)',   toBase: 1 },
@@ -104,7 +105,7 @@ const CATEGORIES = [
   },
   {
     id: 'time',
-    label: '⏱️ Time',
+    label: 'Time',
     explainer: 'Convert durations — from nanoseconds to years. The base unit is the <strong>second (s)</strong>.',
     units: [
       { label: 'Year (yr)',          toBase: 31536000 },
@@ -121,7 +122,7 @@ const CATEGORIES = [
   },
   {
     id: 'data',
-    label: '💾 Data',
+    label: 'Data',
     explainer: 'Convert digital storage — from bits to petabytes. The base unit is the <strong>bit (b)</strong>.',
     units: [
       { label: 'Petabyte (PB)',  toBase: 8e15 },
@@ -138,7 +139,7 @@ const CATEGORIES = [
   },
   {
     id: 'energy',
-    label: '⚡ Energy',
+    label: 'Energy',
     explainer: 'Convert energy — from joules to kilowatt-hours and calories. The base unit is the <strong>joule (J)</strong>.',
     units: [
       { label: 'Joule (J)',               toBase: 1 },
@@ -154,7 +155,7 @@ const CATEGORIES = [
   },
   {
     id: 'currency',
-    label: '💱 Currency',
+    label: 'Currency',
     explainer: 'Approximate exchange rates relative to <strong>USD ($)</strong>. These are hardcoded approximate values — use a live rate service for precision trading.',
     units: [
       { label: 'US Dollar (USD)',           toBase: 1 },
@@ -364,7 +365,7 @@ export default function UnitConverter() {
                     style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: 0, flexShrink: 0 }}
                     title={isFav(activeCategory, index) ? 'Remove from favourites' : 'Add to favourites'}
                   >
-                    {isFav(activeCategory, index) ? '⭐' : '☆'}
+                    {isFav(activeCategory, index) ? <HiStar style={{ color: 'var(--accent)' }} size={16} /> : <HiOutlineStar size={16} />}
                   </button>
                 </div>
                 <span className={styles.quickResultUnit}>{label}</span>

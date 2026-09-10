@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { HiXMark, HiOutlineCommandLine } from 'react-icons/hi2';
 
 const SHORTCUTS = {
   '/calculators/basic': [
@@ -75,7 +76,7 @@ export default function KeyboardShortcutsModal() {
         onMouseEnter={e => { e.target.style.background = 'var(--accent-light)'; e.target.style.color = 'var(--accent)'; e.target.style.borderColor = 'var(--accent)'; }}
         onMouseLeave={e => { e.target.style.background = 'var(--bg-surface-2)'; e.target.style.color = 'var(--text-muted)'; e.target.style.borderColor = 'var(--border)'; }}
       >
-        ?
+        <HiOutlineCommandLine size={18} />
       </button>
 
       {open && (
@@ -101,9 +102,11 @@ export default function KeyboardShortcutsModal() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                ⌨️ Keyboard Shortcuts
+                Keyboard Shortcuts
               </h2>
-              <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '1.25rem', cursor: 'pointer', lineHeight: 1 }}>✕</button>
+              <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '1.25rem', cursor: 'pointer', lineHeight: 1 }}>
+                <HiXMark size={18} />
+              </button>
             </div>
 
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>

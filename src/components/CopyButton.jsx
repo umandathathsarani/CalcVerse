@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { HiOutlineDocumentDuplicate as CopyIcon, HiCheck as CheckIcon } from 'react-icons/hi2';
 
 /**
  * CopyButton — copies `text` to clipboard and briefly shows a ✓ tick.
@@ -53,7 +54,7 @@ export default function CopyButton({ text, size = 'sm', label }) {
         flexShrink: 0,
       }}
     >
-      {copied ? '✓' : '⎘'}
+      {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
       {label && <span>{copied ? 'Copied!' : label}</span>}
     </button>
   );

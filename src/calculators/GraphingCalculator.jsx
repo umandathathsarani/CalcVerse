@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import * as math from 'mathjs';
+import { HiXMark, HiArrowDownTray, HiEye, HiEyeSlash } from 'react-icons/hi2';
 import CopyButton from '../components/CopyButton';
 import styles from './GraphingCalculator.module.css';
 
@@ -371,10 +372,10 @@ export default function GraphingCalculator() {
                   spellCheck="false"
                 />
                 <button className={styles.iconBtn} onClick={(e) => { e.stopPropagation(); toggleVisibility(eq.id); }} title="Toggle Visibility">
-                  {eq.visible ? '👁' : '🙈'}
+                  {eq.visible ? <HiEye size={16} /> : <HiEyeSlash size={16} />}
                 </button>
                 <button className={`${styles.iconBtn} ${styles.danger}`} onClick={(e) => { e.stopPropagation(); deleteEquation(eq.id); }} title="Delete Equation">
-                  ✕
+                  <HiXMark size={16} />
                 </button>
               </div>
             ))}
@@ -411,7 +412,9 @@ export default function GraphingCalculator() {
               <button className={styles.btn} onClick={zoomIn}>Zoom In</button>
             </div>
             <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={resetZoom}>Reset View</button>
-            <button className={styles.btn} onClick={exportPNG}>⬇ Export PNG</button>
+            <button className={styles.btn} onClick={exportPNG}>
+              <HiArrowDownTray size={15} style={{ marginRight: '0.3rem' }} /> Export PNG
+            </button>
           </div>
           
           <div className={styles.evalBox}>

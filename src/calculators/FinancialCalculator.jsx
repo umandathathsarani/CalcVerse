@@ -138,7 +138,7 @@ function LoanCalculator({ currency = '$' }) {
             </button>
             {results.schedule.length > 0 && (
               <button className={styles.toggleTableBtn} onClick={exportCSV} style={{ marginTop: '0.4rem', borderStyle: 'solid', borderColor: 'var(--accent)', color: 'var(--accent)' }}>
-                ⬇ Export CSV
+                Export CSV
               </button>
             )}
             
@@ -590,7 +590,7 @@ function TipCalculator() {
           <label className={styles.label}>Split (Number of People)</label>
           <div className={styles.inputWrapper}>
             <input type="number" className={styles.input} value={split} onChange={e => setSplit(e.target.value)} placeholder="1" min="1" />
-            <span className={styles.suffix}>👤</span>
+            <span className={styles.suffix}>People</span>
           </div>
         </div>
         <button className={styles.resetBtn} onClick={reset}>Reset Fields</button>

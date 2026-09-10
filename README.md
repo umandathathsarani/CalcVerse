@@ -15,6 +15,10 @@ Built with React 18 and Vite, it focuses on providing a premium user experience 
 ![CalcVerse Home](./Screenshots/01.png)
 <br/>
 ![CalcVerse Theme](./Screenshots/02.png)
+<br/>
+![All Calculators Overview 1](./Screenshots/03.png)
+<br/>
+![All Calculators Overview 2](./Screenshots/04.png)
 
 </div>
 
@@ -67,14 +71,11 @@ Convert across 10 different categories (Length, Weight, Temp, Area, Volume, Spee
 - **Favourites System**: Pin frequently used units for quick access (persisted in LocalStorage).
 
 ### Global App Features
-![History & More](./Screenshots/03.png)
 - **Calculation History Page**: A dedicated page storing all your calculations. You can search, filter by calculator type, copy results, and clear history.
 - **Universal Keyboard Shortcuts**: A quick-access modal (`?` key) lists shortcuts for navigating and using the app.
 - **Persistent Theme**: Toggle between Dark and Light mode (persisted in LocalStorage).
 
-![Modals & Features](./Screenshots/04.png)
-<br/>
-![Additional Features](./Screenshots/05.png)
+![History & More](./Screenshots/05.png)
 
 ## 🛠️ Tech Stack
 
